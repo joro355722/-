@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>คำนวณ BMI</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-image: url('BG01.jpg'); 
+            background-size: cover; 
+            background-position: center; 
+            color: #00bfff;
+            margin: 0;
+            display: flex;
+            height: 100vh; 
+            flex-direction: column;
+        }
+
+        nav {
+            background-color: rgba(0, 191, 255, 0.8); 
+            padding: 20px;
+            width: 200px;
+            height: 100vh;
+            position: fixed;
+            left: 0;
+            top: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            transform: translateX(0);
+            transition: transform 0.3s ease-in-out;
+            z-index: 1;
+        }
+
+        nav a {
+            color: #000;
+            text-decoration: none;
+            font-weight: bold;
+            margin: 10px 0;
+            display: block;
+            padding: 10px;
+            width: 100%;
+        }
+
+        nav a:hover {
+            background-color: white;
+            color: #000;
+        }
+
+        .menu-toggle {
+            position: fixed;
+            left: 220px;
+            top: 20px;
+            background-color: #00bfff;
+            border: none;
+            padding: 10px;
+            cursor: pointer;
+            z-index: 1000;
+            font-size: 24px;
+        }
+
+        .container {
+            margin-left: 220px;
+            padding: 20px;
+            width: calc(100% - 220px);
+            background-color: rgba(255, 255, 255, 0.8); 
+            border-radius: 10px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            text-align: center;
+            height: 100vh;
+            padding-top: 50px;
+            transition: margin-left 0.3s ease-in-out, width 0.3s ease-in-out;
+        }
+
+        .hidden {
+            transform: translateX(-220px);
+        }
+
+        .expanded {
+            margin-left: 0;
+            width: 100%;
+        }
+
+        .form-container {
+            background-color: #f0f8ff;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 10px;
+            width: 80%;
+        }
+
+        .form-container input {
+            padding: 10px;
+            margin: 10px;
+            width: 100%;
+            font-size: 16px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+
+        .form-container button {
+            background-color: #00bfff;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        .form-container button:hover {
+            background-color: #0099cc;
+        }
+
+        .result {
+            margin-top: 20px;
+            font-size: 18px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .error-message {
+            color: red;
+            font-weight: bold;
+        }
+
+        img {
+            margin-top: 20px;
+            width: 500px;
+            border-radius: 50px;
+        }
+
+        .article {
+            background-color: #f0f8ff;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 10px;
+            width: 80%;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .article h2 {
+            font-size: 24px;
+            color: #00bfff;
+        }
+
+        .article h3 {
+            font-size: 20px;
+            color: #0099cc;
+        }
+
+        .article p {
+            font-size: 16px;
+            line-height: 1.6;
+            color: #333;
+        }
+
+    </style>
+</head>
+<body>
+    <nav id="sidebar">
+        <a href="index.html">หน้าแรก</a>
+        <a href="bmi.html">คำนวณ BMI</a>
+        <a href="calories.html">คำนวณ BMR</a>
+        <a href="articles.html">คำนวณ TDEE</a>
+        <a href="contact.html">ติดต่อเรา</a>
+    </nav>
+
+    <button class="menu-toggle" id="menuButton" onclick="toggleMenu()">☰</button>
+
+    <div class="container" id="main-content">
+        
+		<section class="article">
+            <h2>รู้จักกับ BMI</h2>
+            <p><strong>BMI</strong> (Body Mass Index) หรือ ดัชนีมวลกาย คือ เครื่องมือที่ใช้ในการประเมินความสมดุลของน้ำหนักและส่วนสูงของร่างกาย เพื่อประเมินความเสี่ยงในการเกิดโรคที่เกี่ยวข้องกับน้ำหนักที่เกินหรือขาดสมดุล.</p>
+
+            <h3>ทำไมต้องรู้ BMI?</h3>
+            <p>การทราบค่า BMI จะช่วยให้คุณเข้าใจถึงสถานะของน้ำหนักตัวในปัจจุบัน ว่าคุณอยู่ในกลุ่มที่มีน้ำหนักปกติหรือน้ำหนักเกิน ซึ่งสามารถเป็นตัวชี้วัดในการป้องกันโรคต่าง ๆ เช่น โรคหัวใจ, โรคเบาหวาน, และโรคความดันโลหิตสูง.</p>
+
+            <h3>รู้แล้วได้อะไร?</h3>
+            <p>การคำนวณ BMI ช่วยให้คุณสามารถติดตามสุขภาพได้ดีขึ้น และตัดสินใจในเรื่องการดูแลสุขภาพ เช่น การควบคุมน้ำหนักหรือการปรับเปลี่ยนพฤติกรรมการทานอาหาร และออกกำลังกายเพื่อสุขภาพที่ดี.</p>
+        </section>
+		
+		<h1>คำนวณ BMI</h1>
+		
+        <p>กรุณากรอกน้ำหนักและส่วนสูงเพื่อคำนวณ BMI ของคุณ</p>
+
+        <div class="form-container">
+            <input type="number" id="weight" placeholder="กรอกน้ำหนัก (กก.)" required>
+            <input type="number" id="height" placeholder="กรอกส่วนสูง (ซม.)" required>
+            <button onclick="calculateBMI()">คำนวณ BMI</button>
+        </div>
+
+        <div class="result" id="result">
+            
+        </div>
+        <div id="error-message" class="error-message"></div>
+
+        <img src="body001.jpg" alt="Body Image">
+    </div>
+
+    <script>
+        function toggleMenu() {
+            let sidebar = document.getElementById('sidebar');
+            let content = document.getElementById('main-content');
+            sidebar.classList.toggle('hidden');
+            content.classList.toggle('expanded');
+        }
+
+        function calculateBMI() {
+            let weight = parseFloat(document.getElementById('weight').value);
+            let height = parseFloat(document.getElementById('height').value);
+            let errorMessage = document.getElementById('error-message');
+            let resultDiv = document.getElementById('result');
+            resultDiv.innerHTML = '';  
+            errorMessage.innerHTML = ''; 
+
+
+            if (isNaN(weight) || isNaN(height) || weight <= 0 || height <= 0) {
+                errorMessage.innerHTML = "กรุณากรอกข้อมูลให้ถูกต้อง! น้ำหนักและส่วนสูงต้องมีค่ามากกว่า 0";
+                return;
+            }
+
+
+            height = height / 100;
+
+ 
+            let bmi = weight / (height * height);
+            let resultText = "BMI ของคุณคือ: " + bmi.toFixed(2);
+
+
+            if (bmi < 18.5) {
+                resultText += " (น้ำหนักต่ำกว่าเกณฑ์)";
+            } else if (bmi >= 18.5 && bmi < 24.9) {
+                resultText += " (น้ำหนักปกติ)";
+            } else if (bmi >= 25 && bmi < 29.9) {
+                resultText += " (น้ำหนักเกิน)";
+            } else {
+                resultText += " (โรคอ้วน)";
+            }
+
+
+            resultDiv.innerHTML = resultText;
+        }
+    </script>
+</body>
+</html>
